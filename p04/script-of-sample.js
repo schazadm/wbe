@@ -1,14 +1,14 @@
-// require('./scripts.js')
+// require('./scripts_test.js')
 
 function scriptOfSample(character, scripts) {
-    if (character.length !== 1)
-        return
+    // if (character.length !== 1)
+    //     return
     let code = character.codePointAt(0)
     let name = 'unknown'
     for (let script of scripts)
         for (let range of script.ranges)
-            if (range[0] <= code && range[1] >= code)
-                name = script.name
+            if (range[0] <= code && code < range[1])
+                return script.name
     return name
 }
 
@@ -17,5 +17,9 @@ function scriptOfSample(character, scripts) {
 // console.log(scriptOfSample("я", SCRIPTS))
 // console.log(scriptOfSample("-", SCRIPTS))
 // console.log(scriptOfSample("م", SCRIPTS))
+// console.log(scriptOfSample("Ù…Ø³Ø§Ø¡ Ø§Ù„Ø®ÙŠØ±", SCRIPTS))
+// console.log(scriptOfSample("è", SCRIPTS))
+// console.log(scriptOfSample("‹", SCRIPTS))
+// console.log(scriptOfSample("±", SCRIPTS))
 
 module.exports = { scriptOfSample }

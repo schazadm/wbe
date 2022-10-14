@@ -17,9 +17,5 @@ function scriptOfSample(character, scripts) {
 // console.log(scriptOfSample("я", SCRIPTS))
 // console.log(scriptOfSample("-", SCRIPTS))
 // console.log(scriptOfSample("م", SCRIPTS))
-// console.log(scriptOfSample("Ù…Ø³Ø§Ø¡ Ø§Ù„Ø®ÙŠØ±", SCRIPTS))
-// console.log(scriptOfSample("è", SCRIPTS))
-// console.log(scriptOfSample("‹", SCRIPTS))
-// console.log(scriptOfSample("±", SCRIPTS))
 
 module.exports = { scriptOfSample }

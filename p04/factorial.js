@@ -1,5 +1,3 @@
-const assert = require('assert')
-
 function factorial(n) {
     let sum = 1
     let i = n

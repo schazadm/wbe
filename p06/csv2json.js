@@ -61,8 +61,18 @@ function logStatsOfFile(filepath) {
         });
 }
 
+// check arguments
+if (process.argv.length !== 4) {
+    console.error("Amount of args false")
+    return
+}
+
+// get arguments of console
+let pathToCSV = process.argv[2]
+let pathToJSON = process.argv[3]
+
 // logStatsOfFile('csv/population.csv')
-readCSV('csv/population_test.csv')
+readCSV(pathToCSV)
     .catch(() => {
         console.log("Error reading file")
     })
@@ -70,11 +80,10 @@ readCSV('csv/population_test.csv')
     .catch(() => {
         console.log("Error parsing csv -> json")
     })
-    .then(data => saveFile('json/data.json', data))
+    .then(data => saveFile(pathToJSON, data))
     .catch(() => {
         console.log("Error writing json file")
     })
-
-
-// get arguments of console
-// process.argv[2]
+    .then(() => {
+        console.info(`${pathToCSV} parsed into ${pathToJSON}`)
+    })

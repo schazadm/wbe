@@ -1,5 +1,4 @@
 const https = require("https")
-const { request } = require("https")
 
 function getTempOfLocation(location) {
     if (!location) {

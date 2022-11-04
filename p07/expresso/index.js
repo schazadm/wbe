@@ -18,19 +18,19 @@ function error(status, msg) {
 //  https://stackoverflow.com/questions/6860853/generate-random-string-for-div-id#6860916
 //
 function guidGenerator() {
-  var S4 = function() {
-    return (((1+Math.random())*0x10000)|0).toString(16).substring(1)
+  var S4 = function () {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
   }
-  return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4())
+  return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4())
 }
 
 //  API-Key überprüfen
 // 
-app.use('/api', function(req, res, next){
+app.use('/api', function (req, res, next) {
   var key = req.query['api-key']
-  
+
   // Key fehlt
-  if (!key) { 
+  if (!key) {
     return next(error(400, 'api key required'))
   }
   // Key falsch
@@ -49,11 +49,11 @@ app.use(express.json())
 var apiKeys = ['wbeweb']
 
 //  unsere tolle in-memory Datenbank :)
-var data = {1234567890: {demodata: "wbe is an inspiring challenge"}}
+var data = { 1234567890: { demodata: "wbe is an inspiring challenge" } }
 
 //  GET-Request bearbeiten
 //
-app.get('/api/data/:id', function(req, res, next){
+app.get('/api/data/:id', function (req, res, next) {
   var id = req.params.id
   var result = data[id]
 
@@ -66,12 +66,30 @@ app.get('/api/data/:id', function(req, res, next){
 app.post('/api/data', function (req, res, next) {
   let id = guidGenerator()
   data[id] = req.body
-  res.send({id})
+  res.send({ id })
 })
+
+app.delete('/api/data/:id', function (req, res, next) {
+  var id = req.params.id
+  res.status(204)
+  if (!data[id])
+    res.send({})
+  data[id] = ''
+  res.send()
+})
+
+app.put('/api/data/:id', function (req, res, next) {
+  var id = req.params.id
+  if (!data[id])
+    next()
+  data[id] = req.body
+  res.send(data[id])
+})
+
 
 //  Middleware mit vier Argumenten wird zur Fehlerbehandlung verwendet
 //
-app.use(function(err, req, res, next){
+app.use(function (err, req, res, next) {
   res.status(err.status || 500)
   res.send({ error: err.message })
 })
@@ -79,13 +97,10 @@ app.use(function(err, req, res, next){
 //  Catch-all: wenn keine vorangehende Middleware geantwortet hat, wird
 //  hier ein 404 (not found) erzeugt
 //
-app.use(function(req, res){
+app.use(function (req, res) {
   res.status(404)
   res.send({ error: "not found" })
 })
 
 app.listen(3000)
 console.log('Express started on port 3000')
-
-
-

@@ -19,9 +19,9 @@ function elt(type, attrs, ...children) {
 function showBoard() {
     let board = document.getElementsByClassName('board')[0]
     board.innerHTML = ''
-    for (let i = 0; i < state.length; i++) {
+    for (let i = 0; i < n_rows; i++) {
         let row = elt('div', { 'class': 'row' })
-        for (let j = 0; j < state[i].length; j++) {
+        for (let j = 0; j < n_columns; j++) {
             let piece = undefined
             switch (state[i][j]) {
                 case 'r':

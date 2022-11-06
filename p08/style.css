@@ -1,0 +1,34 @@
+div {
+    box-sizing: border-box;
+}
+
+.board {
+    width: 84vw;
+    margin: auto;
+    outline: 1px solid black;
+}
+
+.row {
+    display: flex;
+}
+
+.field {
+    border: 1px solid black;
+    width: 12vw;
+    height: 12vw;
+}
+
+.piece {
+    width: 10vw;
+    height: 10vw;
+    border-radius: 50%;
+    margin: 1vw;
+}
+
+.piece.blue {
+    background-color: blue;
+}
+
+.piece.red {
+    background-color: red;
+}

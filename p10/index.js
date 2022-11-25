@@ -65,6 +65,20 @@ var data = {
   c4nColumns: n_columns.toString(),
 }
 
+// let counter = {
+//   v: 0,
+//   listener: undefined,
+//   set value(v) {
+//     this.v = v
+//     if (this.listener) this.listener(v)
+//   },
+//   get value() { return this.v },
+//   count() { this.value++ },
+//   registerListener(callback) {
+//     this.listener = callback
+//   },
+// }
+
 //  GET-Request bearbeiten
 //
 app.get('/api/data/:id', function (req, res, next) {

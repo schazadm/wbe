@@ -19,6 +19,7 @@ async function init() {
         await loadState()
     } else {
         disableServerBtns()
+        loadStateLocal()
     }
     // player stat
     showCurrPlayer()
@@ -52,6 +53,7 @@ async function resetGame() {
     init()
 }
 
+// FIXME: better approach?
 async function isApiReachable() {
     try {
         await fetch(url.format('c4nRows'))
@@ -79,18 +81,26 @@ async function loadState() {
     state = await res.json()
 }
 
+function loadStateLocal() {
+    if (localStorage.getItem('c4state') !== null)
+        state = JSON.parse(localStorage.getItem('c4state'))
+}
+
 async function saveState() {
-    fetch(
-        url.format('c4state'),
-        {
-            method: 'PUT',
-            headers:
+    if (await isApiReachable()) {
+        fetch(
+            url.format('c4state'),
             {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(state)
-        }
-    )
+                method: 'PUT',
+                headers:
+                {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(state)
+            }
+        )
+    }
+    saveStateLocal()
 }
 
 function saveStateLocal() {
@@ -98,14 +108,13 @@ function saveStateLocal() {
 }
 
 async function loadAndRefresh() {
-    let res = await fetch(url.format('c4state'))
-    state = await res.json()
+    await loadState()
     showCurrPlayer()
     refreshBoard()
 }
 
 function loadAndRefreshLocal() {
-    state = JSON.parse(localStorage.getItem('c4state'))
+    loadStateLocal()
     showCurrPlayer()
     refreshBoard()
 }

@@ -2,35 +2,37 @@
 const board_dom = document.getElementsByClassName('board')[0]
 const h2Title_dom = document.getElementById('title')
 const currPlayer_dom = document.getElementById('currPlayer')
-
+// fetch api
 let url = "http://localhost:3000/api/data/{0}?api-key=c4game"
-
-// state TODO: ask if good practice?
-let boardLayout = undefined
-let n_rows = undefined
-let n_columns = undefined
+// defaults
+let boardLayout = []
+let n_rows = 6
+let n_columns = 7
 let state = Object.create({})
-state.board = undefined
-state.currPlayer = undefined
+state.board = Array(n_rows).fill('').map(el => Array(n_columns).fill(''))
+state.currPlayer = 'r'
 
 async function init() {
-    // fetch data
-    await loadBoardSize()
-    await loadState()
-
+    if (await isApiReachable()) {
+        // fetch current data from api
+        await loadBoardSize()
+        await loadState()
+    } else {
+        disableServerBtns()
+    }
+    // player stat
     showCurrPlayer()
+    // board creation and drawing
     createBoard()
     drawBoard()
     refreshBoard()
-
+    // first thing first check for winner 😎
     isThereAreWinner()
-
     // add event listeners to all fields
     document.querySelectorAll('.field').forEach(field => {
         field.addEventListener('click', e => {
             if (!addPiece(e.currentTarget))
                 return
-
             if (!isThereAreWinner()) {
                 toggleCurrPlayer()
                 showCurrPlayer()
@@ -48,6 +50,21 @@ async function resetGame() {
     h2Title_dom.innerHTML = 'Current Player: '
     await saveState()
     init()
+}
+
+async function isApiReachable() {
+    try {
+        await fetch(url.format('c4nRows'))
+    } catch (e) {
+        return false
+    }
+    return true
+}
+
+function disableServerBtns() {
+    document.querySelectorAll('button.server').forEach(btn => {
+        btn.disabled = true
+    })
 }
 
 async function loadBoardSize() {
@@ -76,9 +93,19 @@ async function saveState() {
     )
 }
 
+function saveStateLocal() {
+    localStorage.setItem('c4state', JSON.stringify(state))
+}
+
 async function loadAndRefresh() {
     let res = await fetch(url.format('c4state'))
     state = await res.json()
+    showCurrPlayer()
+    refreshBoard()
+}
+
+function loadAndRefreshLocal() {
+    state = JSON.parse(localStorage.getItem('c4state'))
     showCurrPlayer()
     refreshBoard()
 }
@@ -100,47 +127,31 @@ function showWinner() {
     currPlayer_dom.innerHTML = `The winner is ${(state.currPlayer === 'r') ? 'Red' : 'Blue'}`
 }
 
-function drawBoard() {
-    for (let i = 0; i < n_rows; i++) {
-        let row = elt('div', { 'class': 'row' })
-        for (let j = 0; j < n_columns; j++) {
-            row.appendChild(
-                elt(
-                    'div',
-                    {
-                        'class': 'field',
-                        'data-row': i,
-                        'data-column': j
-                    },
-                    elt('div', { 'class': 'piece' })
-                )
-            )
-        }
-        board_dom.appendChild(row)
-    }
-}
-
 function createBoard() {
     for (let i = 0; i < n_rows; i++) {
-        let row = ['div', { 'class': 'row' }]
+        let row = new Array('div', { 'class': 'row' })
         for (let j = 0; j < n_columns; j++) {
-            row += [
+            row.push(new Array(
                 'div',
                 {
                     'class': 'field',
                     'data-row': i,
                     'data-column': j
                 },
-                [
+                new Array(
                     'div',
                     { 'class': 'piece' }
-                ]
-            ]
+                )
+            ))
         }
-        boardLayout += row
+        boardLayout.push(row)
     }
+}
 
-    console.log(boardLayout);
+function drawBoard() {
+    for (let i = 0; i < n_rows; i++) {
+        renderSJDON(boardLayout[i], board_dom)
+    }
 }
 
 function refreshBoard() {

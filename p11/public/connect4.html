@@ -14,8 +14,20 @@
   <div class="game-info">
     <h2><span id="title">Current Player: </span><span id="currPlayer"></span></h2>
     <button type="button" onclick="resetGame()">New Game</button>
-    <button type="button" onclick="loadAndRefresh()">Load</button>
-    <button type="button" onclick="saveState()">Save</button>
+  </div>
+
+  <div class="game-info">
+    <div>
+      <h2>Server:</h2>
+      <button class="server" type="button" onclick="loadAndRefresh()">Load</button>
+      <button class="server" type="button" onclick="saveState()">Save</button>
+    </div>
+
+    <div>
+      <h2>Local:</h2>
+      <button class="local" type="button" onclick="loadAndRefreshLocal()">Load</button>
+      <button class="local" type="button" onclick="saveStateLocal()">Save</button>
+    </div>
   </div>
 
   <div class="board"></div>

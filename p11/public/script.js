@@ -6,6 +6,7 @@ const currPlayer_dom = document.getElementById('currPlayer')
 let url = "http://localhost:3000/api/data/{0}?api-key=c4game"
 
 // state TODO: ask if good practice?
+let boardLayout = undefined
 let n_rows = undefined
 let n_columns = undefined
 let state = Object.create({})
@@ -18,6 +19,7 @@ async function init() {
     await loadState()
 
     showCurrPlayer()
+    createBoard()
     drawBoard()
     refreshBoard()
 
@@ -116,6 +118,29 @@ function drawBoard() {
         }
         board_dom.appendChild(row)
     }
+}
+
+function createBoard() {
+    for (let i = 0; i < n_rows; i++) {
+        let row = ['div', { 'class': 'row' }]
+        for (let j = 0; j < n_columns; j++) {
+            row += [
+                'div',
+                {
+                    'class': 'field',
+                    'data-row': i,
+                    'data-column': j
+                },
+                [
+                    'div',
+                    { 'class': 'piece' }
+                ]
+            ]
+        }
+        boardLayout += row
+    }
+
+    console.log(boardLayout);
 }
 
 function refreshBoard() {

@@ -54,3 +54,5 @@ function connect4Winner(player, board) {
 
     return false
 }
+
+export { connect4Winner }

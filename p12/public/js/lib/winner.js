@@ -55,4 +55,4 @@ function connect4Winner(player, board) {
     return false
 }
 
-// module.exports = { connect4Winner }
+export { connect4Winner }

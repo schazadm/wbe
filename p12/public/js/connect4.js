@@ -15,6 +15,7 @@ state.board = Array(n_rows).fill('').map(el => Array(n_columns).fill(''))
 state.currPlayer = 'r'
 
 async function init() {
+    // check api
     if (await isApiReachable()) {
         // fetch current data from api
         await loadBoardSize()
@@ -32,19 +33,7 @@ async function init() {
     // first thing first check for winner 😎
     isThereAreWinner()
     // add event listeners to all fields
-    document.querySelectorAll('.field').forEach(field => {
-        field.addEventListener('click', e => {
-            if (!addPiece(e.currentTarget))
-                return
-            if (!isThereAreWinner()) {
-                toggleCurrPlayer()
-                showCurrPlayer()
-            }
-            refreshBoard()
-            saveState()
-            saveStateLocal()
-        })
-    })
+    addFieldListeners()
 }
 
 /* =====================================================================
@@ -135,6 +124,22 @@ function addPiece(field) {
         }
     }
     return false
+}
+
+function addFieldListeners() {
+    document.querySelectorAll('.field').forEach(field => {
+        field.addEventListener('click', e => {
+            if (!addPiece(e.currentTarget))
+                return
+            if (!isThereAreWinner()) {
+                toggleCurrPlayer()
+                showCurrPlayer()
+            }
+            refreshBoard()
+            saveState()
+            saveStateLocal()
+        })
+    })
 }
 
 /* =====================================================================

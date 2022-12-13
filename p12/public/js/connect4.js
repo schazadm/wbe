@@ -158,6 +158,15 @@ function showWinner() {
     currPlayer_dom.innerHTML = `The winner is ${(state.currPlayer === 'r') ? 'Red' : 'Blue'}`
 }
 
+function toggleCurrPlayer() {
+    state.currPlayer = (state.currPlayer === 'r') ? 'b' : 'r'
+}
+
+function showCurrPlayer() {
+    currPlayer_dom.innerHTML = (state.currPlayer === 'r') ? 'Red' : 'Blue'
+    currPlayer_dom.style.color = (state.currPlayer === 'r') ? 'red' : 'blue'
+}
+
 /* =====================================================================
  *  local
  * =====================================================================

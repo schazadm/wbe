@@ -1,3 +1,7 @@
+import { render } from "./lib/suiweb.js"
+import { connect4Winner } from "./lib/winner.js"
+import { renderSJDON } from "./lib/render-sjdon.js"
+
 // DOM
 const board_dom = document.getElementsByClassName('board')[0]
 const h2Title_dom = document.getElementById('title')
@@ -13,16 +17,18 @@ let n_columns = 7
 let state = Object.create({})
 state.board = Array(n_rows).fill('').map(el => Array(n_columns).fill(''))
 state.currPlayer = 'r'
+let stateSeq = []
 
 async function init() {
     // check api
+    // automatic load disabled
     if (await isApiReachable()) {
         // fetch current data from api
         await loadBoardSize()
-        await loadState()
+        // await loadState()
     } else {
         disableServerBtns()
-        loadStateLocal()
+        // loadStateLocal()
     }
     // player stat
     showCurrPlayer()
@@ -34,6 +40,7 @@ async function init() {
     isThereAreWinner()
     // add event listeners to all fields
     addFieldListeners()
+    addBtnEventListeners()
 }
 
 /* =====================================================================
@@ -60,6 +67,22 @@ function loadAndRefreshLocal() {
     loadStateLocal()
     showCurrPlayer()
     refreshBoard()
+}
+
+function undoLastTurn() {
+    if (stateSeq.length > 0)
+        state = stateSeq.pop()
+    showCurrPlayer()
+    refreshBoard()
+}
+
+function addBtnEventListeners() {
+    document.querySelector('#undoLastTurn').addEventListener('click', undoLastTurn)
+    document.querySelector('#resetGame').addEventListener('click', resetGame)
+    document.querySelector('#loadAndRefresh').addEventListener('click', loadAndRefresh)
+    document.querySelector('#saveState').addEventListener('click', saveState)
+    document.querySelector('#loadAndRefreshLocal').addEventListener('click', loadAndRefreshLocal)
+    document.querySelector('#saveStateLocal').addEventListener('click', saveStateLocal)
 }
 
 /* =====================================================================
@@ -97,16 +120,17 @@ function refreshBoard() {
     for (let i = 0; i < n_rows; i++) {
         for (let j = 0; j < n_columns; j++) {
             let piece_class = ''
-
-            if (state.board[i][j] === 'r')
+            if (state.board[i][j] === 'r') {
                 piece_class = 'red'
-            else if (state.board[i][j] === 'b')
+            } else if (state.board[i][j] === 'b') {
                 piece_class = 'blue'
-
-            if (piece_class === '')
-                continue
-
-            findPiece(i, j).classList.add(piece_class)
+            }
+            if (piece_class === '') {
+                findPiece(i, j).classList.remove('red')
+                findPiece(i, j).classList.remove('blue')
+            } else {
+                findPiece(i, j).classList.add(piece_class)
+            }
         }
     }
 }
@@ -128,18 +152,25 @@ function addPiece(field) {
 
 function addFieldListeners() {
     document.querySelectorAll('.field').forEach(field => {
-        field.addEventListener('click', e => {
-            if (!addPiece(e.currentTarget))
-                return
-            if (!isThereAreWinner()) {
-                toggleCurrPlayer()
-                showCurrPlayer()
-            }
-            refreshBoard()
-            saveState()
-            saveStateLocal()
-        })
+        field.addEventListener('click', e => setPiece(e))
     })
+}
+
+function setPiece(element) {
+    stateSeq.push(structuredClone(state))
+    if (!addPiece(element.currentTarget)) {
+        stateSeq.pop()
+        return
+    }
+    if (!isThereAreWinner()) {
+        toggleCurrPlayer()
+        showCurrPlayer()
+    }
+    refreshBoard()
+
+    // automatic save disabled
+    // saveState()
+    // saveStateLocal()
 }
 
 /* =====================================================================
@@ -236,6 +267,17 @@ async function saveState() {
  *  helper
  * =====================================================================
 */
+function setInList(list, idx, new_value) {
+    let new_list = [...list]
+    new_list[idx] = new_value
+    return new_list
+}
+
+function setInObj(obj, attr, new_value) {
+    let new_obj = { ...obj }
+    new_obj[attr] = new_value
+    return new_obj
+}
 
 /**
  * src: https://sebhastian.com/javascript-format-string/
@@ -248,3 +290,9 @@ if (!String.prototype.format) {
         });
     };
 }
+
+/* =====================================================================
+ *  exports
+ * =====================================================================
+*/
+export { init }

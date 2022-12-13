@@ -15,30 +15,31 @@
 <body>
   <div class="game-info">
     <h2><span id="title">Current Player: </span><span id="currPlayer"></span></h2>
-    <button type="button" onclick="resetGame()">New Game</button>
+    <button id="undoLastTurn">Undo</button>
+    <button id="resetGame">New Game</button>
   </div>
 
   <div class="game-info">
     <div>
       <h2>Server:</h2>
-      <button class="server" type="button" onclick="loadAndRefresh()">Load</button>
-      <button class="server" type="button" onclick="saveState()">Save</button>
+      <button id="loadAndRefresh">Load</button>
+      <button id="saveState">Save</button>
     </div>
 
     <div>
       <h2>Local:</h2>
-      <button class="local" type="button" onclick="loadAndRefreshLocal()">Load</button>
-      <button class="local" type="button" onclick="saveStateLocal()">Save</button>
+      <button id="loadAndRefreshLocal">Load</button>
+      <button id="saveStateLocal">Save</button>
     </div>
   </div>
 
   <div class="board"></div>
 
   <!-- js -->
-  <script src="./js/connect4.js"></script>
-  <script src="./js/lib/winner.js"></script>
-  <script src="./js/lib/render-sjdon.js"></script>
-  <script> init() </script>
+  <script type="module">
+    import { init } from './js/connect4.js'
+    init()
+  </script>
 </body>
 
 </html>

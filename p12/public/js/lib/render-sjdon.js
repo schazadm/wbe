@@ -22,5 +22,3 @@ function renderSJDON(element, root) {
     }
     return root.appendChild(node)
 }
-
-export { renderSJDON }

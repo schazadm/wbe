@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+body {
+    font-family: Roboto, system-ui, sans-serif;
+}
+
+div {
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #9b4caf;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 250ms ease-out;
+}
+
+button:hover {
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    background-color: #fff;
+    color: #9b4caf;
+}
+
+.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.board,
+.game-info {
+    width: 84vw;
+}
+
+.game-info {
+    margin: 0 auto 20px auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.game-info h2 {
+    margin: 0;
+}
+
+.board {
+    margin: 5rem auto auto;
+}
+
+.row {
+    display: flex;
+}
+
+.field {
+    width: 12vw;
+    height: 12vw;
+}
+
+.row .field:first-child {
+    border-left: 2px solid #9b4caf;
+}
+
+.row .field:last-child {
+    border-right: 2px solid #9b4caf;
+}
+
+.row:last-child .field {
+    border-bottom: 2px solid #9b4caf;
+}
+
+.row .field {
+    border-left: 1px solid #9b4caf;
+}
+
+.piece {
+    width: 10vw;
+    height: 10vw;
+    border-radius: 50%;
+    margin: 1vw;
+}
+
+.piece.blue {
+    background-color: rgba(63, 114, 233, 0.85);
+}
+
+.piece.red {
+    background-color: rgba(212, 66, 66, 0.85);
+}
